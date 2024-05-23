@@ -8,7 +8,8 @@ Este directorio contiene el modelo Simulink, pantallazos de los bloques del mode
 
 - **models/**: Contiene el archivo del modelo Simulink (`sunset_pv.slx`).
 - **screenshots/**: Contiene pantallazos de cada bloque del modelo Simulink.
-- **scripts/**: Contiene el script de MATLAB (`data_pv.m`) utilizado para realizar los cálculos.
+- **scripts/**: Contiene el script de MATLAB ([`data_pv.m`](scripts/data_pv.m)) utilizado para realizar los cálculos.
+- **data/**: Contiene el archivo CSV (`simulation_results.csv`) con los resultados de las simulaciones.
 - **README.md**: Este archivo, que documenta los hallazgos y proporciona descripciones detalladas.
 
 ## Pantallazos de los Bloques
@@ -70,93 +71,40 @@ Este bloque es similar al Bloque 4 y calcula la foto corriente (\( I_{ph} \)) co
 
 ### PV Module
 
-![PV Module](screenshots/PVModule.png)
+![PV Module](screenshots/block_pvModule.png)
 
 Descripción:
 Este bloque conecta todos los bloques mencionados anteriormente. `voltage_values` contiene un Sample time de 0.1.
 
 ## Script de MATLAB
 
-El script `data_pv.m` se utiliza para simular el comportamiento del panel solar bajo diferentes condiciones. A continuación se muestra el contenido del script:
+El script `data_pv.m` se utiliza para simular el comportamiento del panel solar bajo diferentes condiciones. Puedes encontrar el script en la carpeta `scripts` o acceder directamente [aquí](scripts/data_pv.m).
 
-```matlab
-% data_pv.m
-% Descripción del script y cómo utilizarlo
-% ...
+## Resultados
 
-% Ejemplo de uso:
-Voc = 47.4;  % Tensión en circuito abierto (Voc)
+### Archivo CSV: `simulation_results.csv`
 
-% Crear un vector de voltaje con 100 valores desde 0 hasta Voc
-voltage_values = linspace(0, Voc, 100)';
+El archivo `simulation_results.csv` contiene los resultados de las simulaciones realizadas con el modelo Simulink. Cada fila del archivo representa una combinación de condiciones de temperatura e irradiancia y contiene las siguientes columnas:
 
-% Definir el tiempo de simulación
-t = (0:0.1:99.9)';  % Ajustado para que tenga 100 puntos
+- **Voltage**: El voltaje en el panel solar.
+- **Current**: La corriente generada por el panel solar.
+- **Power**: La potencia calculada como el producto de la corriente y el voltaje.
+- **Temperature**: La temperatura en la que se realizó la simulación.
+- **Irradiance**: La irradiancia (intensidad de luz solar) en la que se realizó la simulación.
 
-% Definir las diferentes condiciones de entrada
-temperatures = 15:5:55;
-irradiances = 100:1000:1000;
+Estos datos permiten analizar cómo varía la corriente y la potencia generada por el panel solar bajo diferentes condiciones de temperatura e irradiancia.
 
-% Inicializar una matriz para almacenar los resultados
-results = [];
+### Ejemplo de Contenido del Archivo CSV
 
-% Cargar el modelo
-model = 'sunset_pv';
-load_system(model);
+| Voltage | Current | Power | Temperature | Irradiance |
+|---------|---------|-------|-------------|------------|
+| 0       | 0       | 0     | 15          | 100        |
+| 0.47    | 0.01    | 0.0047| 15          | 100        |
+| ...     | ...     | ...   | ...         | ...        |
+| 47.4    | 9.35    | 443.79| 55          | 1000       |
 
-% Dividir las combinaciones en bloques para evitar problemas de memoria
-num_blocks = 2;
-block_size = length(temperatures) * length(irradiances) / num_blocks;
+### Análisis de Resultados
 
-parfor block_idx = 1:num_blocks
-    block_results = [];
-    for temp_idx = 1:length(temperatures)
-        for irr_idx = 1:length(irradiances)
-            temp = temperatures(temp_idx);
-            irr = irradiances(irr_idx);
-            
-            % Mostrar el progreso
-            disp(['Ejecutando simulación para temperatura = ', num2str(temp), ' °C, irradiancia = ', num2str(irr), ' W/m^2']);
-            
-            % Definir las señales de entrada para temperatura e irradiancia
-            T = [t, temp * ones(size(t))];
-            G = [t, irr * ones(size(t))];
-            
-            % Asignar las variables al espacio de trabajo base
-            assignin('base', 'T', T);
-            assignin('base', 'G', G);
-            assignin('base', 'voltage_values', voltage_values);  % Asignar el vector de voltaje
-            
-            % Ejecutar la simulación
-            simOut = sim(model);
-            
-            % Verificar si la salida de Simulink contiene los campos esperados
-            if isfield(simOut, 'V') && isfield(simOut, 'I')
-                % Obtener los resultados de la simulación
-                voltage_data = simOut.V.signals.values;  % Acceder a los datos de voltaje
-                current_data = simOut.I.signals.values;  % Acceder a los datos de corriente
-                power_data = voltage_data .* current_data;  % Calcular la potencia
-                
-                % Crear una matriz temporal con los datos actuales
-                temp_results = [voltage_data, current_data, power_data, temp * ones(size(voltage_data)), irr * ones(size(voltage_data))];
-                
-                % Concatenar los resultados actuales a la matriz de resultados del bloque
-                block_results = [block_results; temp_results];
-            else
-                disp(['Simulink output does not contain expected fields for temperatura = ', num2str(temp), ' °C, irradiancia = ', num2str(irr), ' W/m^2.']);
-            end
-        end
-    end
-    
-    % Concatenar los resultados del bloque a la matriz de resultados principal
-    results = [results; block_results];
-end
+El análisis de estos resultados permite evaluar el desempeño del panel solar en diversas condiciones ambientales y proporciona una base para la validación del modelo Simulink y la comparación con predicciones basadas en redes neuronales.
 
-% Convertir la matriz de resultados a una tabla
-results_table = array2table(results, 'VariableNames', {'Voltage', 'Current', 'Power', 'Temperature', 'Irradiance'});
-
-% Guardar la tabla de resultados en un archivo CSV
-writetable(results_table, 'simulation_results.csv');
-
-% Cerrar el modelo
-close_system(model, 0);
+Para más detalles sobre los cálculos y la simulación, consulta el script [`data_pv.m`](scripts/data_pv.m).
