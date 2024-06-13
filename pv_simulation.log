@@ -1,0 +1,13 @@
+2024-06-01 18:59:02,261 - INFO - Iniciando simulación para temperatura=25 °C, irradiancia=1000 W/m²
+2024-06-01 18:59:02,293 - INFO - Finalizando simulación. Vmpp=0.0 V, Impp=5.162344795630308 A, Pmax=174.14207616053312 W
+2024-06-01 18:59:02,303 - INFO - Simulación finalizada para T=25 °C, G=1000 W/m². Vmpp=36.44 V, Impp=4.78 A, Pmax=174.14 W
+2024-06-01 18:59:23,042 - INFO - Iniciando simulación para temperatura=25 °C, irradiancia=1000 W/m²
+2024-06-01 18:59:23,074 - INFO - Finalizando simulación. Vmpp=0.0 V, Impp=5.162344795630308 A, Pmax=174.14207616053312 W
+2024-06-01 18:59:23,080 - INFO - Simulación finalizada para T=25 °C, G=1000 W/m². Vmpp=36.44 V, Impp=4.78 A, Pmax=174.14 W
+2024-06-01 18:59:23,238 - INFO - Iniciando simulación para temperatura=25 °C, irradiancia=25 W/m²
+2024-06-01 18:59:23,276 - INFO - Finalizando simulación. Vmpp=0.0 V, Impp=0.12905861989588058 A, Pmax=1.0411566121068627 W
+2024-06-01 18:59:23,286 - INFO - Iniciando simulación para temperatura=1000 °C, irradiancia=1000 W/m²
+2024-06-01 19:00:12,812 - INFO - Iniciando simulación para temperatura=25 °C, irradiancia=1000 W/m²
+2024-06-01 19:00:12,845 - INFO - Finalizando simulación. Vmpp=0.0 V, Impp=5.162344795630308 A, Pmax=174.14207616053312 W
+2024-06-01 19:00:12,851 - INFO - Simulación finalizada para T=25 °C, G=1000 W/m². Vmpp=36.44 V, Impp=4.78 A, Pmax=174.14 W
+2024-06-01 19:00:12,851 - INFO - Iniciando simulación para temperatura=1000 °C, irradiancia=25 W/m²
