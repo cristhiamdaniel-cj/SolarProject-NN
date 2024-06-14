@@ -1,0 +1,5 @@
+panel_MageSolarPowertecPlus190_5MI
+panel_MageSolarPowertecPlus200_5MH
+panel_MageSolarPowertecPlus190_5MH
+panel_MageSolarPowertecPlus195_5MH
+panel_MageSolar190_5MR
