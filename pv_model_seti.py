@@ -139,7 +139,7 @@ def main():
         logger.info('Todos los modelos han sido procesados.')
         return
 
-    models_to_process = unprocessed_models[:10]
+    models_to_process = unprocessed_models[:600]
     logger.info(f'Modelos a procesar en esta ejecución: {models_to_process}')
 
     with open(json_file) as f:
