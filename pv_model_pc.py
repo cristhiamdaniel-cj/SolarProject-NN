@@ -129,7 +129,7 @@ def main():
     logger.info('Leyendo datos del archivo JSON...')
 
     json_file = 'extraccion/panelData_part_2.json'
-    processed_file = 'processed_models_2.txt'
+    processed_file = 'extraccion/processed_models_2.txt'
     processed_models = read_processed_models(processed_file)
 
     model_names = get_model_names(json_file)
@@ -167,7 +167,7 @@ def main():
     data_df = pd.DataFrame(all_data, columns=columns)
 
     # Guardar los datos en el archivo CSV
-    header = not os.path.exists('panel_simulation_data_2.csv')
+    header = not os.path.exists('extraccion/panel_simulation_data_2.csv')
     data_df.to_csv('panel_simulation_data_2.csv', index=False, mode='a', header=header)
     logger.info('Datos de simulación almacenados en panel_simulation_data_2.csv')
 
