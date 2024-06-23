@@ -128,7 +128,7 @@ def main():
     logger = logging.getLogger()
     logger.info('Leyendo datos del archivo JSON...')
 
-    json_file = 'extraccion/panelData_part_3.json'
+    json_file = 'panelData_part_3.json'
     processed_file = 'processed_models_3.txt'
     processed_models = read_processed_models(processed_file)
 
@@ -139,7 +139,7 @@ def main():
         logger.info('Todos los modelos han sido procesados.')
         return
 
-    models_to_process = unprocessed_models[:500]
+    models_to_process = unprocessed_models[:690]
     logger.info(f'Modelos a procesar en esta ejecución: {models_to_process}')
 
     with open(json_file) as f:

@@ -128,8 +128,10 @@ def main():
     logger = logging.getLogger()
     logger.info('Leyendo datos del archivo JSON...')
 
+
     json_file = 'panelData_part_2.json'
     processed_file = 'processed_models_2.txt'
+
     processed_models = read_processed_models(processed_file)
 
     model_names = get_model_names(json_file)
