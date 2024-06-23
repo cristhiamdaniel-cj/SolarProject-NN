@@ -8,7 +8,7 @@ import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # Configuración del logger para que guarde los logs en un archivo
-logging.basicConfig(filename='simulation_1.log', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(filename='simulation_2.log', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def safe_exp(x):
     x_clipped = np.clip(x, None, 700)
@@ -128,8 +128,8 @@ def main():
     logger = logging.getLogger()
     logger.info('Leyendo datos del archivo JSON...')
 
-    json_file = 'extraccion/panelData_part_1.json'
-    processed_file = 'processed_models_1.txt'
+    json_file = 'panelData_part_2.json'
+    processed_file = 'processed_models_2.txt'
     processed_models = read_processed_models(processed_file)
 
     model_names = get_model_names(json_file)
@@ -139,7 +139,7 @@ def main():
         logger.info('Todos los modelos han sido procesados.')
         return
 
-    models_to_process = unprocessed_models[:600]
+    models_to_process = unprocessed_models[:1000]
     logger.info(f'Modelos a procesar en esta ejecución: {models_to_process}')
 
     with open(json_file) as f:
@@ -167,9 +167,9 @@ def main():
     data_df = pd.DataFrame(all_data, columns=columns)
 
     # Guardar los datos en el archivo CSV
-    header = not os.path.exists('panel_simulation_data_1.csv')
-    data_df.to_csv('panel_simulation_data_1.csv', index=False, mode='a', header=header)
-    logger.info('Datos de simulación almacenados en panel_simulation_data_1.csv')
+    header = not os.path.exists('panel_simulation_data_2.csv')
+    data_df.to_csv('panel_simulation_data_2.csv', index=False, mode='a', header=header)
+    logger.info('Datos de simulación almacenados en panel_simulation_data_2.csv')
 
     # Actualizar el archivo de modelos procesados
     write_processed_models(processed_file, processed_models)
