@@ -128,8 +128,8 @@ def main():
     logger = logging.getLogger()
     logger.info('Leyendo datos del archivo JSON...')
 
-    json_file = 'extraccion/panelData_part_3.json'
-    processed_file = 'extraccion/processed_models_3.txt'
+    json_file = 'panelData_part_3.json'
+    processed_file = 'processed_models_3.txt'
     processed_models = read_processed_models(processed_file)
 
     model_names = get_model_names(json_file)
@@ -139,7 +139,7 @@ def main():
         logger.info('Todos los modelos han sido procesados.')
         return
 
-    models_to_process = unprocessed_models[:500]
+    models_to_process = unprocessed_models[:690]
     logger.info(f'Modelos a procesar en esta ejecución: {models_to_process}')
 
     with open(json_file) as f:
@@ -167,7 +167,7 @@ def main():
     data_df = pd.DataFrame(all_data, columns=columns)
 
     # Guardar los datos en el archivo CSV
-    header = not os.path.exists('extraccion/panel_simulation_data_3.csv')
+    header = not os.path.exists('panel_simulation_data_3.csv')
     data_df.to_csv('panel_simulation_data_3.csv', index=False, mode='a', header=header)
     logger.info('Datos de simulación almacenados en panel_simulation_data_3.csv')
 

@@ -1,36 +1,22 @@
-import os
-import csv
 import json
 
-# Ruta a los archivos
-panel_data_file = 'extraccion/panelData_part_4.json'
-panel_errors_file = 'panel_errors.csv'
+# Rutas a los archivos
+txt_file = 'processed_models_3.txt'
+json_file = 'panelData_part_3.json'
 
-# Leer los modelos procesados de los archivos .txt
-processed_models = set()
-for filename in os.listdir('.'):
-    if filename.startswith("processed_models") and filename.endswith(".txt"):
-        with open(filename, 'r') as file:
-            processed_models.update(line.strip() for line in file)
+# Contar las líneas en el archivo .txt
+with open(txt_file, 'r') as file:
+    num_lines_txt = sum(1 for line in file)
 
-# Leer los datos de los paneles del archivo JSON
-with open(panel_data_file, 'r') as file:
-    panel_data = json.load(file)
-    all_panels = set(panel_data.keys())
+# Contar los registros en el archivo .json
+with open(json_file, 'r') as file:
+    json_data = json.load(file)
+    num_records_json = len(json_data)
 
-# Leer los paneles con errores del archivo CSV
-errored_panels = set()
-with open(panel_errors_file, 'r', newline='') as csvfile:
-    reader = csv.DictReader(csvfile)
-    for row in reader:
-        errored_panels.add(row['Panel'])
-
-# Determinar los paneles que faltan por procesar
-remaining_panels = errored_panels - processed_models
+# Realizar la resta
+difference = num_records_json - num_lines_txt
 
 # Mostrar el resultado
-print(f"Total de paneles en {panel_data_file}: {len(all_panels)}")
-print(f"Paneles procesados: {len(processed_models)}")
-print(f"Paneles con errores en {panel_errors_file}: {len(errored_panels)}")
-print(f"Paneles restantes por procesar: {len(remaining_panels)}")
-# print("Paneles restantes por procesar:", remaining_panels)
+print(f"Número de líneas en {txt_file}: {num_lines_txt}")
+print(f"Número de registros en {json_file}: {num_records_json}")
+print(f"Diferencia: {difference}")
