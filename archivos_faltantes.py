@@ -1,73 +1,49 @@
+# import pandas as pd
+#
+# # Leer panel_errors.csv y extraer todos los elementos de la columna Panel en una lista.Imprimir su tamanio
+# panel_errors = pd.read_csv('panel_errors.csv')
+# panel_errors_list = panel_errors['Panel'].tolist()
+# print(len(panel_errors_list))
+#
+# # Leer todos los .txt de extraccion/ y extraccion2/ y concatenar una lista de lineas de esos archivos de texto sin duplicados
+# import os
+# lines = []
+# # Evitar duplicados y repetidos
+# for folder in ['extraccion', 'extraccion2']:
+#     for file in os.listdir(folder):
+#         with open(folder + '/' + file, 'r') as f:
+#             lines += list(set(f.readlines()))
+# print(len(lines))
+#
+# # Contabilizar que paneles de panel_errors_list no estan en lines
+# missing_panels = [panel for panel in panel_errors_list if panel not in lines]
+# print(len(missing_panels))
+
+# contabilizar cuantas claves tiene el json:panelData.json
 import json
+with open('panelData.json', 'r') as f:
+    panel_data = json.load(f)
+print(len(panel_data.keys()))
 
-# Rutas a los archivos
-txt_file = 'processed_models_1.txt'
-json_file = 'panelData_part_1.json'
-txt_file = 'processed_models_2.txt'
-json_file = 'panelData_part_2.json'
+# Leer missing_panels.txt y extraer todos los elementos en una lista
+with open('missing_panels.txt', 'r') as f:
+    missing_panels = f.readlines()
+missing_panels = [panel.strip() for panel in missing_panels]
 
-# Leer y obtener nombres de los paneles del archivo JSON
-with open(json_file, 'r') as file:
-    json_data = json.load(file)
-    panel_names_json = set(json_data.keys())
 
-# Leer y obtener las líneas del archivo TXT
-with open(txt_file, 'r') as file:
-    lines_txt = [line.strip() for line in file]
+# Extraer las los registros de panelData.json que tengan la clave que este en missing_panels
+missing_panels_data = {key: panel_data[key] for key in missing_panels}
+print(len(missing_panels_data))
 
-# Verificar duplicados en el archivo TXT
-unique_lines_txt = set(lines_txt)
-duplicates_txt = [line for line in lines_txt if lines_txt.count(line) > 1]
+# Guardar los registros en un nuevo json
+with open('missing_panels_data.json', 'w') as f:
+    json.dump(missing_panels_data, f)
 
-# Comparar nombres de paneles en JSON y TXT
-missing_in_json = unique_lines_txt - panel_names_json
-missing_in_txt = panel_names_json - unique_lines_txt
-# Mostrar resultados
-print(f"Total de paneles en JSON: {len(panel_names_json)}")
-print(f"Total de líneas en TXT: {len(lines_txt)}")
-print(f"Total de líneas únicas en TXT: {len(unique_lines_txt)}")
-print(f"Total de duplicados en TXT: {len(duplicates_txt)}")
+# Dividir ese json en 4 json con los siguientes numeros de registros: 600, 350, 300 y 479
+missing_panels_data = list(missing_panels_data.items())
+for i, size in enumerate([600, 350, 300, 479]):
+    with open(f'missing_panels_data_{i}.json', 'w') as f:
+        json.dump(dict(missing_panels_data[:size]), f)
+        missing_panels_data = missing_panels_data[size:]
+print(len(missing_panels_data))
 
-print(f"Paneles en TXT que no están en JSON: {missing_in_json}")
-print(f"Paneles en JSON que no están en TXT: {missing_in_txt}")
-print(f"Número de paneles en TXT que no están en JSON: {len(missing_in_json)}")
-print(f"Número de paneles en JSON que no están en TXT: {len(missing_in_txt)}")
-
-if duplicates_txt:
-    print(f"Líneas duplicadas en TXT: {duplicates_txt}")
-else:
-    print("No hay líneas duplicadas en TXT.")
-# Mostrar resultados
-print(f"Total de paneles en JSON: {len(panel_names_json)}")
-print(f"Total de líneas en TXT: {len(lines_txt)}")
-print(f"Total de líneas únicas en TXT: {len(unique_lines_txt)}")
-print(f"Total de duplicados en TXT: {len(duplicates_txt)}")
-
-# print(f"Paneles en TXT que no están en JSON: {missing_in_json}")
-# print(f"Paneles en JSON que no están en TXT: {missing_in_txt}")
-print(f"Número de paneles en TXT que no están en JSON: {len(missing_in_json)}")
-print(f"Número de paneles en JSON que no están en TXT: {len(missing_in_txt)}")
-
-if duplicates_txt:
-    print(f"Líneas duplicadas en TXT: {duplicates_txt}")
-else:
-    print("No hay líneas duplicadas en TXT.")
-txt_file = 'processed_models_3.txt'
-json_file = 'panelData_part_3.json'
-
-# Contar las líneas en el archivo .txt
-with open(txt_file, 'r') as file:
-    num_lines_txt = sum(1 for line in file)
-
-# Contar los registros en el archivo .json
-with open(json_file, 'r') as file:
-    json_data = json.load(file)
-    num_records_json = len(json_data)
-
-# Realizar la resta
-difference = num_records_json - num_lines_txt
-
-# Mostrar el resultado
-print(f"Número de líneas en {txt_file}: {num_lines_txt}")
-print(f"Número de registros en {json_file}: {num_records_json}")
-print(f"Diferencia: {difference}")
